@@ -151,3 +151,16 @@ $record->somethingElse = "some other value";
 $record->save(); // saves the record to redis
 $record->delete(); // deletes the record from redis
 ```
+
+
+todo
+测试channel
+
+
+修复ARedisEntity->expire()的语法错误
+删除过时的方法 如redis->delete,redis-lsize
+
+修复ARedisList->copyFrom()方法中的语法错误
+修复ARedisSet->copyFrom()方法中的语法错误
+
+解决ARedisHash中类销毁时会自动设置过期时间为10天的bug

@@ -25,10 +25,12 @@ class ARedisChannel extends ARedisIterableEntity {
 	 * @var array
 	 */
 	protected $_data = array();
-	/**
-	 * Subscribes to the channel
-	 * @return ARedisIterableChannel $this subscribed to the channel
-	 */
+
+    /**
+     * Subscribes to the channel
+     * @return ARedisChannel $this subscribed to the channel
+     * @throws CException
+     */
 	public function subscribe() {
 		if ($this->name === null) {
 			throw new CException(get_class($this)." requires a name!");
@@ -36,10 +38,12 @@ class ARedisChannel extends ARedisIterableEntity {
 		$this->getConnection()->getClient()->subscribe(array($this->name),array($this,"receiveMessage"));
 		return $this;
 	}
-	/**
-	 * Unsubscribes from the channel
-	 * @return ARedisIterableChannel $this unsubscribed from the channel
-	 */
+
+    /**
+     * Unsubscribes from the channel
+     * @return ARedisChannel $this unsubscribed from the channel
+     * @throws CException
+     */
 	public function unsubscribe() {
 		if ($this->name === null) {
 			throw new CException(get_class($this)." requires a name!");
@@ -48,11 +52,12 @@ class ARedisChannel extends ARedisIterableEntity {
 		return $this;
 	}
 
-	/**
-	 * Publishes a message to the channel
-	 * @param string $message The message to publish
-	 * @return integer the number of clients that received the message
-	 */
+    /**
+     * Publishes a message to the channel
+     * @param string $message The message to publish
+     * @return integer the number of clients that received the message
+     * @throws CException
+     */
 	public function publish($message) {
 		if ($this->name === null) {
 			throw new CException(get_class($this)." requires a name!");
@@ -60,12 +65,14 @@ class ARedisChannel extends ARedisIterableEntity {
 		$this->_data[] = $message;
 		return $this->getConnection()->getClient()->publish($this->name,$message);
 	}
-	/**
-	 * Receives a message from a subscribed channel
-	 * @param Redis $redis the redis client instance
-	 * @param string $channel the name of the channel
-	 * @param string $message the message content
-	 */
+
+    /**
+     * Receives a message from a subscribed channel
+     * @param Redis $redis the redis client instance
+     * @param string $channel the name of the channel
+     * @param string $message the message content
+     * @throws CException
+     */
 	public function receiveMessage($redis, $channel, $message) {
 		$this->_data[] = $message;
 		$event=new CEvent($this);
@@ -83,10 +90,11 @@ class ARedisChannel extends ARedisIterableEntity {
 		return $this->_data[$count - 1];
 	}
 
-	/**
-	 * This event is raised after a message is received
-	 * @param CEvent $event the event parameter
-	 */
+    /**
+     * This event is raised after a message is received
+     * @param CEvent $event the event parameter
+     * @throws CException
+     */
 	public function onReceiveMessage($event)
 	{
 		$this->raiseEvent('onReceiveMessage',$event);
@@ -124,8 +132,7 @@ class ARedisChannel extends ARedisIterableEntity {
 	 * This method is required by the interface ArrayAccess.
 	 * @param integer $offset the offset to retrieve item.
 	 * @return mixed the item at the offset
-	 * @throws CException if the offset is invalid
-	 */
+     */
 	public function offsetGet($offset)
 	{
 		return $this->_data[$offset];

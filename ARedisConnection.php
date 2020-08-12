@@ -63,10 +63,12 @@ class ARedisConnection extends CApplicationComponent {
 		$this->_client = $client;
 	}
 
-	/**
-	 * Gets the redis client
-	 * @return Redis the redis client
-	 */
+    /**
+     * Gets the redis client
+     * @param bool $reconnect
+     * @return Redis the redis client
+     * @throws CException
+     */
 	public function getClient($reconnect = false)
 	{
 		if ($this->_client === null || $reconnect) {
@@ -135,13 +137,14 @@ class ARedisConnection extends CApplicationComponent {
 		return parent::__set($name,$value);
 	}
 
-	/**
-	 * Checks if a property value is null.
-	 * Do not call this method. This is a PHP magic method that we override
-	 * to allow using isset() to detect if a component property is set or not.
-	 * @param string $name the property name
-	 * @return boolean
-	 */
+    /**
+     * Checks if a property value is null.
+     * Do not call this method. This is a PHP magic method that we override
+     * to allow using isset() to detect if a component property is set or not.
+     * @param string $name the property name
+     * @return boolean
+     * @throws CException
+     */
 	public function __isset($name)
 	{
 		$getter='get'.$name;
@@ -160,7 +163,6 @@ class ARedisConnection extends CApplicationComponent {
 	 * to allow using unset() to set a component property to be null.
 	 * @param string $name the property name or the event name
 	 * @throws CException if the property is read only.
-	 * @return mixed
 	 */
 	public function __unset($name)
 	{
@@ -175,14 +177,16 @@ class ARedisConnection extends CApplicationComponent {
 			parent::__unset($name);
 		}
 	}
-	/**
-	 * Calls a method on the redis client with the given name.
-	 * Do not call this method. This is a PHP magic method that we override to
-	 * allow a facade in front of the redis object.
-	 * @param string $name the name of the method to call
-	 * @param array $parameters the parameters to pass to the method
-	 * @return mixed the response from the redis client
-	 */
+
+    /**
+     * Calls a method on the redis client with the given name.
+     * Do not call this method. This is a PHP magic method that we override to
+     * allow a facade in front of the redis object.
+     * @param string $name the name of the method to call
+     * @param array $parameters the parameters to pass to the method
+     * @return mixed the response from the redis client
+     * @throws CException
+     */
 	public function __call($name, $parameters) {
 		return call_user_func_array(array($this->getClient(),$name),$parameters);
 	}

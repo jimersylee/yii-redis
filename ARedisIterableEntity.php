@@ -26,7 +26,7 @@ abstract class ARedisIterableEntity extends ARedisEntity implements IteratorAggr
 	 */
 	public function getIterator()
 	{
-        	$data = $this->getData();
+	    $data = $this->getData();
 		return new CListIterator($data);
 	}
 
@@ -71,14 +71,15 @@ abstract class ARedisIterableEntity extends ARedisEntity implements IteratorAggr
 		return in_array($item, $this->getData());
 	}
 
-	/**
-	 * Removes all the items from the entity
-	 * @return ARedisIterableEntity the current entity
-	 */
+    /**
+     * Removes all the items from the entity
+     * @return ARedisIterableEntity the current entity
+     * @throws CException
+     */
 	public function clear() {
 		$this->_data = null;
 		$this->_count = null;
-		$this->getConnection()->getClient()->delete($this->name);
+		$this->getConnection()->getClient()->del($this->name);
 		return $this;
 	}
 

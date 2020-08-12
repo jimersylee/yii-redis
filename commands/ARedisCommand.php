@@ -5,7 +5,10 @@ Yii::import("packages.redis.*");
  * @package packages.redis.commands
  */
 class ARedisCommand extends CConsoleCommand {
-
+    /**
+     * @param $args
+     * @throws CException
+     */
 	public function actionSubscribe($args) {
 
 		$redis = $this->getConnection();

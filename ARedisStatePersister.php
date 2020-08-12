@@ -37,6 +37,7 @@ class ARedisStatePersister extends CApplicationComponent implements IStatePersis
     /**
      * Initializes the application component.
      * This method overrides the parent implementation by checking if redis is available.
+     * @throws CException
      */
     public function init()
     {
@@ -46,7 +47,7 @@ class ARedisStatePersister extends CApplicationComponent implements IStatePersis
 
     /**
      * Sets the redis connection to use for this session handler
-     * @param ARedisConnection|string $connection the redis connection, if a string is provided, it is presumed to be a the name of an applciation component
+     * @param ARedisConnection|string $connection the redis connection, if a string is provided, it is presumed to be a the name of an application component
      */
     public function setConnection($connection)
     {
@@ -59,6 +60,7 @@ class ARedisStatePersister extends CApplicationComponent implements IStatePersis
     /**
      * Gets the redis connection to use for this session handler
      * @return ARedisConnection
+     * @throws CException
      */
     public function getConnection()
     {
@@ -74,19 +76,21 @@ class ARedisStatePersister extends CApplicationComponent implements IStatePersis
     /**
      * Loads state data from persistent storage.
      * @return mixed state data. Null if no state data available.
+     * @throws CException
      */
     public function load()
     {
-        $content = $this->_connection->client->get($this->key);
+        $content = $this->_connection->getClient()->get($this->key);
         return ($content !== false) ? unserialize($content) : null;
     }
 
     /**
      * Saves application state in persistent storage.
      * @param mixed $state state data (must be serializable).
+     * @throws CException
      */
     public function save($state)
     {
-        $this->_connection->client->set($this->key, serialize($state));
+        $this->_connection->getClient()->set($this->key, serialize($state));
     }
 }

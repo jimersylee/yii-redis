@@ -172,11 +172,13 @@ class ARedisSortedSet extends ARedisIterableEntity {
 		}
 		return $this->_count;
 	}
-	/**
-	 * Gets all the members in the  sorted set
-	 * @param boolean $forceRefresh whether to force a refresh or not
-	 * @return array the members in the set
-	 */
+
+    /**
+     * Gets all the members in the  sorted set
+     * @param boolean $forceRefresh whether to force a refresh or not
+     * @return array the members in the set
+     * @throws CException
+     */
 	public function getData($forceRefresh = false) {
 		if ($forceRefresh || $this->_data === null) {
 			$this->_data = $this->getConnection()->getClient()->zrange($this->name,0, -1, true);

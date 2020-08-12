@@ -26,7 +26,7 @@ class ARedisLogRoute extends CLogRoute {
 
 	/**
 	 * Sets the redis connection to use for caching
-	 * @param ARedisConnection|string $connection the redis connection, if a string is provided, it is presumed to be a the name of an applciation component
+	 * @param ARedisConnection|string $connection the redis connection, if a string is provided, it is presumed to be a the name of an application component
 	 */
 	public function setConnection($connection)
 	{
@@ -36,10 +36,11 @@ class ARedisLogRoute extends CLogRoute {
 		$this->_connection = $connection;
 	}
 
-	/**
-	 * Gets the redis connection to use for caching
-	 * @return ARedisConnection
-	 */
+    /**
+     * Gets the redis connection to use for caching
+     * @return ARedisConnection
+     * @throws CException
+     */
 	public function getConnection()
 	{
 		if ($this->_connection === null) {
@@ -51,10 +52,11 @@ class ARedisLogRoute extends CLogRoute {
 		return $this->_connection;
 	}
 
-	/**
-	 * Stores or broadcasts log messages via redis.
-	 * @param array $logs list of log messages
-	 */
+    /**
+     * Stores or broadcasts log messages via redis.
+     * @param array $logs list of log messages
+     * @throws CException
+     */
 	protected function processLogs($logs)
 	{
 		$redis = $this->getConnection()->getClient();

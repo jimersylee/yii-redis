@@ -38,11 +38,12 @@ abstract class ARedisEntity extends CBehavior {
 	 * @var string
 	 */
 	protected $_oldName;
-	/**
-	 * Constructor
-	 * @param string $name the name of the entity
-	 * @param ARedisConnection|string $connection the redis connection to use with this entity
-	 */
+
+    /**
+     * Constructor
+     * @param null $name the name of the entity
+     * @param null $connection the redis connection to use with this entity
+     */
 	public function __construct($name = null, $connection = null) {
 		if ($name !== null) {
 			$this->name = $name;
@@ -87,7 +88,7 @@ abstract class ARedisEntity extends CBehavior {
 
 	/**
 	 * Sets the redis connection to use for this entity
-	 * @param ARedisConnection|string $connection the redis connection, if a string is provided, it is presumed to be a the name of an applciation component
+	 * @param ARedisConnection|string $connection the redis connection, if a string is provided, it is presumed to be a the name of an application component
 	 */
 	public function setConnection($connection)
 	{
@@ -97,10 +98,11 @@ abstract class ARedisEntity extends CBehavior {
 		$this->_connection = $connection;
 	}
 
-	/**
-	 * Gets the redis connection to use for this entity
-	 * @return ARedisConnection
-	 */
+    /**
+     * Gets the redis connection to use for this entity
+     * @return ARedisConnection
+     * @throws CException
+     */
 	public function getConnection()
 	{
 		if ($this->_connection === null) {
@@ -112,13 +114,15 @@ abstract class ARedisEntity extends CBehavior {
 		return $this->_connection;
 	}
 
-	/**
-	 * Sets the expiration time in seconds to this entity 
-	 *  @param integer number of expiration for this entity in seconds
-	 */
+    /**
+     * Sets the expiration time in seconds to this entity
+     * @param integer number of expiration for this entity in seconds
+     * @return bool
+     * @throws CException
+     */
 	public function expire($seconds)
 	{
-		return $this->getConnection()->expire($this->name, $seconds);
+		return $this->getConnection()->getClient()->expire($this->name, $seconds);
 	}
 
 }

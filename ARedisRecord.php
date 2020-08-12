@@ -67,9 +67,11 @@ abstract class ARedisRecord extends CFormModel {
 	 */
 	public function __construct($scenario = "insert")
 	{
+
 		if ($scenario === null) {
 			return;
 		}
+        parent::__construct($scenario);
 		$this->init();
 		$this->attachBehaviors($this->behaviors());
 		$this->afterConstruct();
@@ -103,12 +105,13 @@ abstract class ARedisRecord extends CFormModel {
 		}
 	}
 
-	/**
-	 * Returns the redis connection used by redis record.
-	 * By default, the "redis" application component is used as the redis connection.
-	 * You may override this method if you want to use a different redis connection.
-	 * @return ARedisConnection the redis connection used by redis record.
-	 */
+    /**
+     * Returns the redis connection used by redis record.
+     * By default, the "redis" application component is used as the redis connection.
+     * You may override this method if you want to use a different redis connection.
+     * @return ARedisConnection the redis connection used by redis record.
+     * @throws CException
+     */
 	public function getRedisConnection()
 	{
 		if ($this->_connection !== null) {
@@ -373,15 +376,15 @@ abstract class ARedisRecord extends CFormModel {
 
 	}
 
-	/**
-	 * Finds multiple redis records with the specified primary keys.
-	 * @param array $pks primary key values.
-	 * @return ARedisRecord[] the records found.
-	 */
+    /**
+     * Finds multiple redis records with the specified primary keys.
+     * @param array $pks primary key values.
+     * @return ARedisRecord[] the records found.
+     * @throws CException
+     */
 	public function findAllByPk($pks)
 	{
 		Yii::trace(get_class($this).'.findAllByPk()','packages.redis.ARedisRecord');
-		$hashes = array();
 		$redis = $this->getRedisConnection()->getClient()->multi();
 		foreach($pks as $pk) {
 			$key = $this->getRedisKey($pk);
