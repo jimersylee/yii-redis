@@ -13,6 +13,7 @@ This package relies on the https://github.com/nicolasff/phpredis PHP extension, 
 Add the following to your application config
 
 ```php
+[
 "components" => array(
 	"redis" => array(
 		"class" => "packages.redis.ARedisConnection",
@@ -22,13 +23,14 @@ Add the following to your application config
 		"prefix" => "Yii.redis."
 	),
 	...
-),
+)];
 ```
 
 ### Storing and Retrieving simple keys
 To store a simple value in a key and read it back:
 
 ```php
+
 Yii::app()->redis->getClient()->set("myKey", "Your Value");
 echo Yii::app()->redis->getClient()->get("myKey"); // outputs "Your Value"
 Yii::app()->redis->getClient()->del("myKey"); // deletes the key
@@ -58,9 +60,9 @@ $set = new ARedisSet("aNameForYourSet");
 $set->add(1);
 $set->add(2);
 $set->add(3);
-echo $set->count; // outputs 3
+echo $set->getCount(); // outputs 3
 $set->add(3);
-echo $set->count; // still 3, cannot add the same value more than once
+echo $set->getCount(); // still 3, cannot add the same value more than once
 foreach($set as $val) {
 	echo $val."<br />";
 }
@@ -90,7 +92,7 @@ $hash = new ARedisHash("myHashNameHere");
 $hash->whatever = "someValue";
 $hash->greeting = "hello world";
 
-echo $hash->count; // outputs 2
+echo $hash->getCount(); // outputs 2
 ```
 
 ### Using Pub/Sub
@@ -100,7 +102,7 @@ Redis allows us to subscribe to channels and publish messages to them.
 $channel = new ARedisChannel("myChan");
 $channel->onReceiveMessage = function($redis, $channel, $message) {
 	echo "Message Received: ".$message."\n";
-}
+};
 $channel->publish("hello world"); // sends a messsage to the channel
 $channel->subscribe(); // subscribes to the channel and listens to messages, blocks the process
 ```
@@ -130,12 +132,13 @@ Redis is a good alternative to memcached for caching because its speed is compar
 In your app config:
 
 ```php
+[
 "components" => array(
 	"cache" => array(
 		"class" => "packages.redis.ARedisCache"
 	),
 	...
-),
+),];
 ```
 
 

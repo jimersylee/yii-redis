@@ -1,5 +1,5 @@
 {
-    "name": "jimersylee/yiiredis",
+    "name": "jimersylee/yii-redis",
     "description": "Familiar Yii style access to redis",
     "license": "MIT",
     "authors": [
